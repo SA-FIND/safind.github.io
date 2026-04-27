@@ -10,13 +10,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- Prevent flash: apply saved theme before paint -->
+  <script>
+    (function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)})();
+  </script>
 </head>
 
 <body>
 
+  <!-- ── AMBIENT BACKGROUND MESH ─────────────── -->
+  <div class="ambient-mesh" aria-hidden="true">
+    <div class="mesh-orb mesh-orb--gold"></div>
+    <div class="mesh-orb mesh-orb--blue"></div>
+    <div class="mesh-orb mesh-orb--teal"></div>
+  </div>
+
   <!-- ── NAVIGATION ─────────────────────────────── -->
   <nav id="nav">
-    <span class="nav-logo">Solomon Ahedor</span>
+    <span class="nav-logo">SA.eng</span>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#projects">Projects</a></li>
@@ -24,9 +35,12 @@
       <li><a href="#skills">Skills</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div style="display:flex;align-items:center;gap:0.5rem">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">☀</button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 
   <!-- Mobile drawer -->
@@ -43,7 +57,7 @@
   <section id="hero">
     <div class="hero-inner">
       <div class="hero-eyebrow">
-        <span class="section-label" style="margin-bottom:0">Metallurgical Engineer &amp; Researcher</span>
+        <span class="section-label">Metallurgical Engineer &amp; Researcher</span>
       </div>
 
       <h1 class="hero-name">
@@ -58,7 +72,7 @@
 
       <div class="hero-cta">
         <a href="#projects" class="btn btn-primary">View My Work</a>
-        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+        <a href="#contact" class="btn btn-ghost">Get in Touch</a>
       </div>
     </div>
 
@@ -146,7 +160,7 @@
             as natural coagulants. Employed Response Surface Methodology with a Face-Centered Central Composite Design
             (CCD) in Design Expert to optimise coagulant dosage and contact time.</p>
           <div class="project-tags">
-            <span class="tag tag--accent">Final Year Project</span>
+            <span class="tag tag--gold">Final Year Project</span>
             <span class="tag">RSM / CCD</span>
             <span class="tag">Design Expert</span>
             <span class="tag">Moringa oleifera</span>
@@ -162,7 +176,7 @@
             Mines. Built XGBoost models with engineered lag features for predicting silica and iron concentrate grade.
             Implementing NMPC and MHE control systems using the do-mpc toolbox.</p>
           <div class="project-tags">
-            <span class="tag tag--tertiary">Research Paper</span>
+            <span class="tag tag--teal">Research Paper</span>
             <span class="tag">XGBoost</span>
             <span class="tag">LOOCV</span>
             <span class="tag">Froth Flotation</span>
@@ -178,7 +192,7 @@
             visualisation, cooling curve simulation, and real-time data access via the Materials Project API. Built
             with Flask and React to democratise computational materials tools.</p>
           <div class="project-tags">
-            <span class="tag tag--accent">Full-Stack</span>
+            <span class="tag tag--blue">Full-Stack</span>
             <span class="tag">Flask</span>
             <span class="tag">React</span>
             <span class="tag">Materials Project API</span>
@@ -193,7 +207,7 @@
             two-stage calcination process. Investigated applications in water purification, including microplastics
             removal, as part of the MICROCLEAN and AGRAVOLUTION initiatives.</p>
           <div class="project-tags">
-            <span class="tag tag--accent">Research Project</span>
+            <span class="tag tag--gold">Research Project</span>
             <span class="tag">Silica Extraction</span>
             <span class="tag">Calcination</span>
             <span class="tag">Waste Valorisation</span>
@@ -381,6 +395,24 @@
     hamburger.addEventListener('click', toggleMenu);
     overlay.addEventListener('click', toggleMenu);
     drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', toggleMenu));
+
+    // Theme toggle
+    const toggle = document.getElementById('themeToggle');
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      toggle.textContent = theme === 'light' ? '☾' : '☀';
+    }
+
+    // Initialize icon based on current state
+    const saved = localStorage.getItem('theme') || '';
+    toggle.textContent = saved === 'light' ? '☾' : '☀';
+
+    toggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      setTheme(current === 'light' ? '' : 'light');
+      if (current === 'light') document.documentElement.removeAttribute('data-theme');
+    });
 
     // Intersection observer for reveals
     const observer = new IntersectionObserver((entries) => {
